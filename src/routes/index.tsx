@@ -92,7 +92,7 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
-  component: Landing;
+  component: Landing,
 });
 
 function estimatePayday(amount: number, days: number) {
