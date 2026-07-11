@@ -37,28 +37,28 @@
 
 :root {
   --radius: 0.75rem;
-  /* Dark palette (single theme) */
-  --background: oklch(0.17 0.012 260);
-  --foreground: oklch(0.97 0.005 260);
-  --surface: oklch(0.21 0.013 260);
-  --surface-elevated: oklch(0.25 0.014 260);
-  --card: oklch(0.21 0.013 260);
-  --card-foreground: oklch(0.97 0.005 260);
-  --popover: oklch(0.21 0.013 260);
-  --popover-foreground: oklch(0.97 0.005 260);
-  --primary: oklch(0.82 0.16 82);
-  --primary-foreground: oklch(0.16 0.015 260);
-  --secondary: oklch(0.28 0.015 260);
-  --secondary-foreground: oklch(0.97 0.005 260);
-  --muted: oklch(0.25 0.014 260);
-  --muted-foreground: oklch(0.7 0.02 260);
-  --accent: oklch(0.82 0.16 82);
-  --accent-foreground: oklch(0.16 0.015 260);
+  /* NuDawn — deep slate/navy with sunrise orange & gold accents */
+  --background: oklch(0.19 0.03 260);
+  --foreground: oklch(0.98 0.005 90);
+  --surface: oklch(0.24 0.035 262);
+  --surface-elevated: oklch(0.28 0.04 262);
+  --card: oklch(0.24 0.035 262);
+  --card-foreground: oklch(0.98 0.005 90);
+  --popover: oklch(0.24 0.035 262);
+  --popover-foreground: oklch(0.98 0.005 90);
+  --primary: oklch(0.75 0.18 55);
+  --primary-foreground: oklch(0.17 0.03 260);
+  --secondary: oklch(0.32 0.03 262);
+  --secondary-foreground: oklch(0.98 0.005 90);
+  --muted: oklch(0.28 0.03 262);
+  --muted-foreground: oklch(0.78 0.02 90);
+  --accent: oklch(0.85 0.15 85);
+  --accent-foreground: oklch(0.17 0.03 260);
   --destructive: oklch(0.6 0.22 27);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.3 0.014 260);
-  --input: oklch(0.28 0.015 260);
-  --ring: oklch(0.82 0.16 82);
+  --border: oklch(0.34 0.03 262);
+  --input: oklch(0.32 0.03 262);
+  --ring: oklch(0.75 0.18 55);
   --whatsapp: oklch(0.68 0.17 145);
 }
 
@@ -81,19 +81,24 @@
   }
 }
 
-@utility gradient-gold {
-  background-image: linear-gradient(135deg, oklch(0.86 0.17 85), oklch(0.75 0.16 65));
+@utility gradient-dawn {
+  background-image: linear-gradient(135deg, oklch(0.8 0.19 55), oklch(0.87 0.16 82));
 }
 
-@utility text-gradient-gold {
-  background-image: linear-gradient(135deg, oklch(0.9 0.16 90), oklch(0.75 0.16 65));
+@utility text-gradient-dawn {
+  background-image: linear-gradient(135deg, oklch(0.85 0.17 65), oklch(0.9 0.15 85));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
+@utility gradient-horizon {
+  background-image: radial-gradient(ellipse at bottom, oklch(0.55 0.18 55 / 0.35), transparent 60%),
+    linear-gradient(180deg, oklch(0.19 0.03 260), oklch(0.24 0.05 275));
+}
+
 @utility glass {
-  background-color: color-mix(in oklab, var(--surface) 70%, transparent);
+  background-color: color-mix(in oklab, var(--surface) 72%, transparent);
   backdrop-filter: blur(12px);
   border: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
 }

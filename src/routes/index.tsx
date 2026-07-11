@@ -6,43 +6,47 @@ import {
   MessageCircle,
   ShieldCheck,
   Zap,
-  FileCheck2,
   Wallet,
   CheckCircle2,
-  Star,
   Phone,
   Mail,
   MapPin,
   ChevronDown,
+  HeartHandshake,
+  Users,
+  Sunrise,
+  FileCheck2,
 } from "lucide-react";
 
-const BUSINESS_NAME = "Kholwa Finance";
-const NCRCP = "NCRCP12345";
+const BUSINESS_NAME = "NuDawn Financial Services";
+const SLOGAN = "New Tomorrow, Together.";
+const NCRCP = "NCRCPXXXXX";
+const FSP = "FSPXXXXX";
 const WHATSAPP_NUMBER = "27821234567"; // international format, no +
-const CONTACT_EMAIL = "hello@kholwafinance.co.za";
+const CONTACT_EMAIL = "hello@nudawn.co.za";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: `${BUSINESS_NAME} | Fast Personal Loans & Financial Services` },
+      { title: `${BUSINESS_NAME} | Payday Loans & Funeral Cover in South Africa` },
       {
         name: "description",
         content:
-          "Apply for quick personal loans up to R20,000. Mobile-first, transparent terms, fully POPIA compliant, and fast WhatsApp processing.",
+          "Fast payday loans up to R3,000 and affordable funeral cover from R42/month. Authorised Credit & Financial Services Provider. Apply via WhatsApp.",
       },
-      { property: "og:title", content: `${BUSINESS_NAME} | Fast Personal Loans in South Africa` },
+      { property: "og:title", content: `${BUSINESS_NAME} — ${SLOGAN}` },
       {
         property: "og:description",
         content:
-          "Fast, transparent personal loans up to R20,000. NCR authorised, POPIA compliant, WhatsApp-first approvals.",
+          "Payday loans up to R3,000 and funeral cover up to R30,000. NCR & FSCA authorised. WhatsApp-first applications.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: `${BUSINESS_NAME} | Fast Personal Loans` },
+      { name: "twitter:title", content: `${BUSINESS_NAME} — ${SLOGAN}` },
       {
         name: "twitter:description",
-        content: "Personal loans up to R20,000. NCR authorised. Apply via WhatsApp in minutes.",
+        content: "Payday loans & funeral cover from an authorised South African provider.",
       },
     ],
     links: [{ rel: "canonical", href: "/" }],
@@ -55,7 +59,7 @@ export const Route = createFileRoute("/")({
             {
               "@type": "LocalBusiness",
               name: BUSINESS_NAME,
-              image: "/favicon.ico",
+              slogan: SLOGAN,
               telephone: "+27821234567",
               email: CONTACT_EMAIL,
               address: {
@@ -66,20 +70,22 @@ export const Route = createFileRoute("/")({
                 postalCode: "2196",
                 addressCountry: "ZA",
               },
-              aggregateRating: {
-                "@type": "AggregateRating",
-                ratingValue: "4.8",
-                reviewCount: "1247",
-              },
             },
             {
               "@type": "FinancialProduct",
-              name: "Personal Loan",
+              name: "NuDawn Payday Loan",
               provider: { "@type": "Organization", name: BUSINESS_NAME },
               description:
-                "Short-term personal loans from R1,000 to R20,000 with terms of 1 to 6 months.",
+                "Short-term payday loans from R500 to R3,000, repayable within 30 days.",
               feesAndCommissionsSpecification:
                 "Interest, initiation and service fees per National Credit Act (NCA) regulations.",
+            },
+            {
+              "@type": "InsuranceAgency",
+              name: `${BUSINESS_NAME} — Funeral Cover`,
+              description:
+                "Affordable funeral cover from R42/month, covering up to 16 family members with benefits up to R30,000.",
+              areaServed: "ZA",
             },
           ],
         }),
@@ -89,41 +95,46 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-function estimateLoan(amount: number, months: number) {
-  // Indicative NCA-style: monthly interest ~5%, initiation fee capped, monthly service fee
-  const monthlyRate = 0.05;
+function estimatePayday(amount: number, days: number) {
+  // Indicative NCA-style short-term costs
   const initiationFee = Math.min(1207.5, 165 + Math.max(0, amount - 1000) * 0.1);
-  const serviceFee = 69 * months;
-  const interest = amount * monthlyRate * months;
+  const serviceFee = 69;
+  const interest = amount * 0.05 * (days / 30);
   const total = amount + interest + initiationFee + serviceFee;
-  const monthly = total / months;
-  return { monthly, total, interest, initiationFee, serviceFee };
+  return { total, interest, initiationFee, serviceFee };
 }
 
 const ZAR = (n: number) =>
   new Intl.NumberFormat("en-ZA", { style: "currency", currency: "ZAR", maximumFractionDigits: 0 }).format(n);
 
 function Landing() {
-  const [amount, setAmount] = useState(5000);
-  const [months, setMonths] = useState(3);
+  const [amount, setAmount] = useState(1500);
+  const [days, setDays] = useState(30);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [employment, setEmployment] = useState("Employed");
+  const [service, setService] = useState<"Payday Loan" | "Funeral Cover">("Payday Loan");
+  const [detail, setDetail] = useState("");
   const [consent, setConsent] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [legal, setLegal] = useState<null | "privacy" | "terms" | "ncr">(null);
+  const [legal, setLegal] = useState<null | "privacy" | "terms" | "popia">(null);
 
-  const est = useMemo(() => estimateLoan(amount, months), [amount, months]);
+  const est = useMemo(() => estimatePayday(amount, days), [amount, days]);
 
-  const buildWhatsAppUrl = (message: string) =>
+  const buildWa = (message: string) =>
     `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
-  const applyMessage = `Hi ${BUSINESS_NAME}, I'd like to apply for a personal loan of ${ZAR(amount)} over ${months} month${months > 1 ? "s" : ""}. Estimated monthly repayment: ${ZAR(est.monthly)}.`;
+  const applyLoanMsg = `Hi ${BUSINESS_NAME}, I'd like to apply for a payday loan of ${ZAR(amount)} over ${days} days. Estimated repayment: ${ZAR(est.total)}.`;
+  const funeralMsg = `Hi ${BUSINESS_NAME}, I'd like a quote for funeral cover. Please share the plan options.`;
 
   const submitLead = (e: React.FormEvent) => {
     e.preventDefault();
     if (!consent || !name || !phone) return;
-    const msg = `New loan enquiry%0A%0AName: ${name}%0APhone: ${phone}%0AEmployment: ${employment}%0AAmount: ${ZAR(amount)}%0ATerm: ${months} month${months > 1 ? "s" : ""}%0AEst. monthly: ${ZAR(est.monthly)}`;
+    const msg =
+      `New enquiry via nudawn.co.za%0A%0A` +
+      `Name: ${name}%0APhone: ${phone}%0AService: ${service}%0A` +
+      (service === "Payday Loan"
+        ? `Amount needed: ${detail || ZAR(amount)}`
+        : `Dependents: ${detail || "not specified"}`);
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
   };
 
@@ -133,17 +144,23 @@ function Landing() {
       <header className="fixed top-0 z-50 w-full glass">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <a href="#home" className="flex items-center gap-2">
-            <div className="grid h-9 w-9 place-items-center rounded-lg gradient-gold text-primary-foreground font-bold">
-              K
+            <div className="grid h-9 w-9 place-items-center rounded-lg gradient-dawn text-primary-foreground">
+              <Sunrise className="h-5 w-5" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight">{BUSINESS_NAME}</span>
+            <div className="leading-tight">
+              <div className="font-display text-base font-bold tracking-tight sm:text-lg">NuDawn</div>
+              <div className="hidden text-[10px] uppercase tracking-widest text-muted-foreground sm:block">
+                Financial Services
+              </div>
+            </div>
           </a>
-          <nav aria-label="Primary" className="hidden gap-8 md:flex">
+          <nav aria-label="Primary" className="hidden gap-7 md:flex">
             {[
-              ["How it works", "#how"],
-              ["Calculator", "#calculator"],
-              ["Eligibility", "#eligibility"],
-              ["FAQ", "#faq"],
+              ["Home", "#home"],
+              ["Payday Loans", "#payday"],
+              ["Funeral Cover", "#funeral"],
+              ["About Us", "#about"],
+              ["Contact", "#contact"],
             ].map(([label, href]) => (
               <a key={href} href={href} className="text-sm text-muted-foreground transition hover:text-foreground">
                 {label}
@@ -151,10 +168,8 @@ function Landing() {
             ))}
           </nav>
           <a
-            href={buildWhatsAppUrl(applyMessage)}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-full gradient-gold px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:opacity-90"
+            href="#apply"
+            className="rounded-full gradient-dawn px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:opacity-90"
           >
             Apply now
           </a>
@@ -162,155 +177,104 @@ function Landing() {
       </header>
 
       <main>
-        {/* HERO */}
+        {/* HERO — dual action */}
         <section id="home" className="relative overflow-hidden pt-28 pb-16 sm:pt-36 sm:pb-24">
           <img
             src={heroBg}
-            alt="Abstract gold light streaks representing fast financial approvals"
+            alt="Warm sunrise light representing a new financial tomorrow"
             width={1920}
             height={1080}
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-40"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-30"
           />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/60 via-background/70 to-background" />
-          <div className="relative mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:items-center">
-            <div>
+          <div className="pointer-events-none absolute inset-0 gradient-horizon opacity-90" />
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+            <div className="mx-auto max-w-3xl text-center">
               <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3 py-1 text-xs text-muted-foreground">
                 <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-                NCR Authorised Credit Provider · {NCRCP}
+                NCR Credit Provider · FSCA Authorised FSP
               </div>
               <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-                Fast & transparent <span className="text-gradient-gold">personal loans</span> in South Africa
+                Accessible <span className="text-gradient-dawn">Payday Loans</span> & Affordable{" "}
+                <span className="text-gradient-dawn">Funeral Cover</span> in South Africa
               </h1>
-              <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
-                Borrow up to R20,000 with clear terms. Apply in minutes on WhatsApp — no branch visits, no paperwork queues.
+              <p className="mt-5 text-base text-muted-foreground sm:text-lg">
+                {SLOGAN} Bridge the gap to your next payday, or protect your family — apply in minutes via WhatsApp.
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="#calculator"
-                  className="inline-flex items-center justify-center gap-2 rounded-full gradient-gold px-6 py-3 font-semibold text-primary-foreground shadow-xl shadow-primary/20 transition hover:opacity-90"
-                >
-                  <Calculator className="h-4 w-4" /> Get your estimate
-                </a>
-                <a
-                  href={buildWhatsAppUrl(applyMessage)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-surface px-6 py-3 font-semibold transition hover:bg-surface-elevated"
-                >
-                  <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
-                </a>
-              </div>
-              <div className="mt-8 grid grid-cols-3 gap-4 text-center">
-                {[
-                  ["4.8★", "1,200+ reviews"],
-                  ["<10 min", "Approval chat"],
-                  ["100%", "POPIA compliant"],
-                ].map(([v, l]) => (
-                  <div key={l} className="rounded-xl border border-border bg-surface/60 p-3">
-                    <div className="font-display text-xl font-bold text-primary">{v}</div>
-                    <div className="text-xs text-muted-foreground">{l}</div>
-                  </div>
-                ))}
-              </div>
             </div>
 
-            {/* CALCULATOR */}
-            <div id="calculator" className="relative">
-              <div className="glass rounded-2xl p-6 shadow-2xl shadow-black/40 sm:p-8">
-                <div className="mb-6 flex items-center justify-between">
-                  <h2 className="font-display text-xl font-bold">Loan estimator</h2>
-                  <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-                    Indicative
+            {/* Dual CTA cards */}
+            <div className="mt-12 grid gap-5 md:grid-cols-2">
+              <a
+                href="#payday"
+                className="group relative overflow-hidden rounded-2xl border border-border bg-surface p-6 transition hover:border-primary/50 sm:p-8"
+              >
+                <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full gradient-dawn opacity-20 blur-2xl transition group-hover:opacity-40" />
+                <div className="relative">
+                  <div className="inline-grid h-11 w-11 place-items-center rounded-xl bg-primary/15 text-primary">
+                    <Wallet className="h-5 w-5" />
+                  </div>
+                  <h2 className="mt-4 font-display text-2xl font-bold">Apply for a Payday Loan</h2>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    R500–R3,000 up to 30 days. Fast, simple, transparent.
+                  </p>
+                  <span className="mt-5 inline-flex items-center gap-2 rounded-full gradient-dawn px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20">
+                    <Calculator className="h-4 w-4" /> Get your estimate
                   </span>
                 </div>
-
-                <div className="space-y-6">
-                  <SliderField
-                    label="Loan amount"
-                    value={ZAR(amount)}
-                    min={1000}
-                    max={20000}
-                    step={500}
-                    val={amount}
-                    onChange={setAmount}
-                  />
-                  <SliderField
-                    label="Repayment period"
-                    value={`${months} month${months > 1 ? "s" : ""}`}
-                    min={1}
-                    max={6}
-                    step={1}
-                    val={months}
-                    onChange={setMonths}
-                  />
-                </div>
-
-                <div className="mt-6 grid grid-cols-2 gap-3">
-                  <Stat label="Monthly installment" value={ZAR(est.monthly)} highlight />
-                  <Stat label="Total repayment" value={ZAR(est.total)} />
-                </div>
-
-                <a
-                  href={buildWhatsAppUrl(applyMessage)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl gradient-gold px-5 py-3.5 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:opacity-90"
-                >
-                  <MessageCircle className="h-5 w-5" /> Apply Now via WhatsApp
-                </a>
-                <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
-                  Estimates shown are indicative only. Final interest rates and terms are subject to formal credit
-                  assessment under the National Credit Act (NCA).
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* HOW IT WORKS */}
-        <section id="how" className="border-t border-border bg-surface/30 py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <div className="mx-auto max-w-2xl text-center">
-              <span className="text-xs font-semibold uppercase tracking-widest text-primary">How it works</span>
-              <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
-                From estimate to payout in 3 simple steps
-              </h2>
-            </div>
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {[
-                { icon: Calculator, title: "Calculate & inquire", desc: "Use the loan estimator, then submit your details or open WhatsApp." },
-                { icon: FileCheck2, title: "Quick chat & verify", desc: "Our team confirms your ID, income and bank details on WhatsApp." },
-                { icon: Wallet, title: "Fast payout", desc: "Once approved, funds are paid into your bank account — same day possible." },
-              ].map((s, i) => (
-                <article key={s.title} className="relative rounded-2xl border border-border bg-surface p-6">
-                  <div className="absolute -top-3 left-6 rounded-full gradient-gold px-2.5 py-0.5 text-xs font-bold text-primary-foreground">
-                    Step {i + 1}
+              </a>
+              <a
+                href="#funeral"
+                className="group relative overflow-hidden rounded-2xl border border-border bg-surface p-6 transition hover:border-accent/50 sm:p-8"
+              >
+                <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-accent opacity-20 blur-2xl transition group-hover:opacity-40" />
+                <div className="relative">
+                  <div className="inline-grid h-11 w-11 place-items-center rounded-xl bg-accent/15 text-accent">
+                    <HeartHandshake className="h-5 w-5" />
                   </div>
-                  <s.icon className="h-8 w-8 text-primary" />
-                  <h3 className="mt-4 font-display text-lg font-bold">{s.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
-                </article>
+                  <h2 className="mt-4 font-display text-2xl font-bold">Get a Funeral Cover Quote</h2>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Premiums from R42/month. Cover up to R30,000 for the whole family.
+                  </p>
+                  <span className="mt-5 inline-flex items-center gap-2 rounded-full border border-accent/50 bg-accent/10 px-5 py-2.5 text-sm font-semibold text-accent">
+                    <MessageCircle className="h-4 w-4" /> Request a quote
+                  </span>
+                </div>
+              </a>
+            </div>
+
+            <div className="mt-10 grid grid-cols-3 gap-4 text-center">
+              {[
+                ["R3,000", "Max payday loan"],
+                ["R42", "Funeral cover from /mo"],
+                ["100%", "POPIA compliant"],
+              ].map(([v, l]) => (
+                <div key={l} className="rounded-xl border border-border bg-surface/60 p-3">
+                  <div className="font-display text-xl font-bold text-primary">{v}</div>
+                  <div className="text-xs text-muted-foreground">{l}</div>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ELIGIBILITY + LEAD FORM */}
-        <section id="eligibility" className="py-20">
-          <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2">
+        {/* PAYDAY LOANS */}
+        <section id="payday" className="border-t border-border bg-surface/30 py-20">
+          <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:items-center">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-widest text-primary">Qualification</span>
-              <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">Do you qualify?</h2>
-              <p className="mt-3 text-muted-foreground">
-                Meet the basic criteria below and you're ready to apply. Approval is subject to credit assessment.
+              <span className="text-xs font-semibold uppercase tracking-widest text-primary">Service 1</span>
+              <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
+                Payday loans to bridge the gap
+              </h2>
+              <p className="mt-4 text-muted-foreground">
+                Life doesn't wait for month-end. NuDawn payday loans give you fast access to short-term cash so you
+                can handle what matters — and settle up on your next payday.
               </p>
-              <ul className="mt-8 space-y-4">
+              <ul className="mt-8 space-y-3">
                 {[
-                  "Valid South African ID",
-                  "18 years or older",
-                  "Verifiable monthly income",
-                  "Active South African bank account",
-                  "Not currently under debt review",
+                  "Borrow between R500 and R3,000",
+                  "Repay within 30 days on your payday",
+                  "Simple WhatsApp application — no branch visits",
+                  "Transparent NCA-regulated fees",
                 ].map((c) => (
                   <li key={c} className="flex items-start gap-3 rounded-xl border border-border bg-surface p-4">
                     <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
@@ -320,17 +284,187 @@ function Landing() {
               </ul>
             </div>
 
-            {/* LEAD FORM */}
-            <div className="glass rounded-2xl p-6 sm:p-8">
-              <h3 className="font-display text-xl font-bold">Start your application</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                4 quick fields — we'll continue on WhatsApp.
+            {/* Payday calculator */}
+            <div className="glass rounded-2xl p-6 shadow-2xl shadow-black/40 sm:p-8">
+              <div className="mb-6 flex items-center justify-between">
+                <h3 className="font-display text-xl font-bold">Payday loan estimator</h3>
+                <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+                  Indicative
+                </span>
+              </div>
+
+              <div className="space-y-6">
+                <SliderField
+                  label="Loan amount"
+                  value={ZAR(amount)}
+                  min={500}
+                  max={3000}
+                  step={100}
+                  val={amount}
+                  onChange={setAmount}
+                  minLabel={ZAR(500)}
+                  maxLabel={ZAR(3000)}
+                />
+                <SliderField
+                  label="Repayment period"
+                  value={`${days} days`}
+                  min={7}
+                  max={30}
+                  step={1}
+                  val={days}
+                  onChange={setDays}
+                  minLabel="7 days"
+                  maxLabel="30 days"
+                />
+              </div>
+
+              <div className="mt-6 grid grid-cols-2 gap-3">
+                <Stat label="Total to repay" value={ZAR(est.total)} highlight />
+                <Stat label="Cost of credit" value={ZAR(est.total - amount)} />
+              </div>
+
+              <a
+                href={buildWa(applyLoanMsg)}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl gradient-dawn px-5 py-3.5 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:opacity-90"
+              >
+                <MessageCircle className="h-5 w-5" /> Apply on WhatsApp
+              </a>
+              <p className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
+                Estimates are indicative. Final terms subject to NCA assessment.
               </p>
-              <form onSubmit={submitLead} className="mt-6 space-y-4" action="https://formspree.io/f/your-endpoint" method="POST">
+            </div>
+          </div>
+        </section>
+
+        {/* FUNERAL COVER */}
+        <section id="funeral" className="py-20">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <div className="mx-auto max-w-2xl text-center">
+              <span className="text-xs font-semibold uppercase tracking-widest text-accent">Service 2</span>
+              <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">
+                Funeral cover that carries your family
+              </h2>
+              <p className="mt-4 text-muted-foreground">
+                Prepare for life's unexpected moments with dignity. Affordable premiums, generous cover, and a
+                claims process built to pay out fast when your family needs it most.
+              </p>
+            </div>
+
+            <div className="mt-12 grid gap-5 md:grid-cols-3">
+              {[
+                { icon: Wallet, k: "From R42", l: "per month" },
+                { icon: Users, k: "Up to 16", l: "family members on one policy" },
+                { icon: ShieldCheck, k: "Up to R30,000", l: "cover benefit per member" },
+              ].map((m) => (
+                <div key={m.l} className="rounded-2xl border border-accent/25 bg-accent/5 p-6">
+                  <m.icon className="h-7 w-7 text-accent" />
+                  <div className="mt-4 font-display text-3xl font-bold text-accent">{m.k}</div>
+                  <div className="mt-1 text-sm text-muted-foreground">{m.l}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-10 grid gap-6 rounded-2xl border border-border bg-surface p-6 sm:p-8 md:grid-cols-[1fr_auto] md:items-center">
+              <div>
+                <h3 className="font-display text-xl font-bold">Get your personal quote in minutes</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Share how many dependents you'd like to cover and our team will send tailored plan options
+                  directly on WhatsApp.
+                </p>
+              </div>
+              <a
+                href={buildWa(funeralMsg)}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-5 py-3.5 font-semibold text-accent-foreground shadow-lg shadow-accent/20 transition hover:opacity-90"
+              >
+                <MessageCircle className="h-5 w-5" /> Request funeral quote
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* ABOUT */}
+        <section id="about" className="border-t border-border bg-surface/30 py-20">
+          <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-widest text-primary">About Us</span>
+              <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">A new tomorrow, together.</h2>
+              <p className="mt-4 text-muted-foreground">
+                NuDawn Financial Services is a South African provider of short-term credit and funeral cover
+                solutions. We're authorised by the National Credit Regulator and the Financial Sector Conduct
+                Authority, and we operate with transparency, respect and speed.
+              </p>
+              <p className="mt-4 text-muted-foreground">
+                Every product is built for real households — clear terms, mobile-first applications, and a team
+                that answers on WhatsApp when you need us.
+              </p>
+              <div className="mt-8 grid grid-cols-3 gap-3 text-center">
+                {[
+                  ["NCR", "Registered credit provider"],
+                  ["FSCA", "Authorised FSP"],
+                  ["POPIA", "Data privacy compliant"],
+                ].map(([k, l]) => (
+                  <div key={k} className="rounded-xl border border-border bg-surface p-3">
+                    <div className="font-display text-lg font-bold text-primary">{k}</div>
+                    <div className="mt-1 text-[11px] text-muted-foreground">{l}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
+              <h3 className="font-display text-lg font-bold">How it works</h3>
+              <ol className="mt-6 space-y-5">
+                {[
+                  { icon: Calculator, t: "Estimate or enquire", d: "Use the calculator or send a short enquiry." },
+                  { icon: FileCheck2, t: "Chat on WhatsApp", d: "Our team verifies your details securely off-site." },
+                  { icon: Zap, t: "Fast outcome", d: "Loan payout same-day or funeral policy activated quickly." },
+                ].map((s, i) => (
+                  <li key={s.t} className="flex items-start gap-4">
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg gradient-dawn text-primary-foreground">
+                      <s.icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <div className="text-xs uppercase tracking-wide text-muted-foreground">Step {i + 1}</div>
+                      <div className="font-semibold">{s.t}</div>
+                      <div className="text-sm text-muted-foreground">{s.d}</div>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACT / LEAD FORM */}
+        <section id="contact" className="py-20">
+          <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2">
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-widest text-primary">Contact</span>
+              <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">Talk to a NuDawn consultant</h2>
+              <p className="mt-3 text-muted-foreground">
+                Send us your details and we'll continue on WhatsApp — no document uploads on the website.
+              </p>
+              <div className="mt-8 space-y-3">
+                <ContactRow icon={MessageCircle} label="WhatsApp" value="+27 82 123 4567" href={`https://wa.me/${WHATSAPP_NUMBER}`} />
+                <ContactRow icon={Phone} label="Call us" value="+27 82 123 4567" href="tel:+27821234567" />
+                <ContactRow icon={Mail} label="Email" value={CONTACT_EMAIL} href={`mailto:${CONTACT_EMAIL}`} />
+                <ContactRow icon={MapPin} label="Office" value="1 Sandton Drive, Johannesburg, 2196" />
+              </div>
+            </div>
+
+            <div id="apply" className="glass rounded-2xl p-6 sm:p-8">
+              <h3 className="font-display text-xl font-bold">Start your enquiry</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Four quick fields. We'll message you on WhatsApp.
+              </p>
+              <form onSubmit={submitLead} className="mt-6 space-y-4">
                 <Field label="Full name">
                   <input
                     required
-                    name="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full rounded-lg border border-input bg-surface px-4 py-3 text-sm outline-none focus:border-primary"
@@ -341,33 +475,33 @@ function Landing() {
                   <input
                     required
                     type="tel"
-                    name="phone"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     className="w-full rounded-lg border border-input bg-surface px-4 py-3 text-sm outline-none focus:border-primary"
                     placeholder="082 123 4567"
                   />
                 </Field>
-                <Field label="Employment status">
+                <Field label="Service required">
                   <select
-                    name="employment"
-                    value={employment}
-                    onChange={(e) => setEmployment(e.target.value)}
+                    value={service}
+                    onChange={(e) => setService(e.target.value as typeof service)}
                     className="w-full rounded-lg border border-input bg-surface px-4 py-3 text-sm outline-none focus:border-primary"
                   >
-                    <option>Employed</option>
-                    <option>Self-Employed</option>
-                    <option>Other</option>
+                    <option>Payday Loan</option>
+                    <option>Funeral Cover</option>
                   </select>
                 </Field>
-                <Field label="Requested amount">
+                <Field
+                  label={service === "Payday Loan" ? "Amount needed (R)" : "Number of dependents"}
+                >
                   <input
-                    readOnly
-                    name="amount"
-                    value={ZAR(amount)}
-                    className="w-full rounded-lg border border-input bg-surface/50 px-4 py-3 text-sm text-muted-foreground"
+                    required
+                    value={detail}
+                    onChange={(e) => setDetail(e.target.value)}
+                    inputMode="numeric"
+                    className="w-full rounded-lg border border-input bg-surface px-4 py-3 text-sm outline-none focus:border-primary"
+                    placeholder={service === "Payday Loan" ? "e.g. 1500" : "e.g. 4"}
                   />
-                  <input type="hidden" name="term_months" value={months} />
                 </Field>
 
                 <label className="flex items-start gap-3 rounded-lg border border-border bg-surface/50 p-3 text-xs text-muted-foreground">
@@ -376,18 +510,18 @@ function Landing() {
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
                     required
-                    className="mt-0.5 h-4 w-4 accent-[oklch(0.82_0.16_82)]"
+                    className="mt-0.5 h-4 w-4 accent-[oklch(0.75_0.18_55)]"
                   />
                   <span>
-                    I consent to the collection and processing of my personal information for the purpose of assessing
-                    this credit inquiry in accordance with POPIA.
+                    I consent to {BUSINESS_NAME} processing my personal information for this inquiry in accordance
+                    with POPIA.
                   </span>
                 </label>
 
                 <button
                   type="submit"
                   disabled={!consent}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl gradient-gold px-5 py-3.5 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl gradient-dawn px-5 py-3.5 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <MessageCircle className="h-5 w-5" /> Continue on WhatsApp
                 </button>
@@ -396,82 +530,28 @@ function Landing() {
           </div>
         </section>
 
-        {/* TESTIMONIALS */}
+        {/* FAQ */}
         <section className="border-t border-border bg-surface/30 py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <div className="mx-auto max-w-2xl text-center">
-              <span className="text-xs font-semibold uppercase tracking-widest text-primary">Reviews</span>
-              <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">Trusted by thousands of South Africans</h2>
-              <div className="mt-3 flex items-center justify-center gap-1 text-primary">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-5 w-5 fill-current" />
-                ))}
-                <span className="ml-2 text-sm text-muted-foreground">4.8 average · 1,247 reviews</span>
-              </div>
-            </div>
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {[
-                { n: "Lerato M.", c: "Cape Town", q: "Applied on WhatsApp during lunch, money in my account before I got home. Really transparent about fees." },
-                { n: "Sipho K.", c: "Durban", q: "No branch visits, no queues. Team explained everything clearly. Would use again." },
-                { n: "Naledi P.", c: "Pretoria", q: "The calculator showed exactly what I'd pay back — no surprises. Repaid early with no drama." },
-              ].map((t) => (
-                <figure key={t.n} className="rounded-2xl border border-border bg-surface p-6">
-                  <div className="flex gap-0.5 text-primary">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-current" />
-                    ))}
-                  </div>
-                  <blockquote className="mt-3 text-sm text-foreground/90">"{t.q}"</blockquote>
-                  <figcaption className="mt-4 text-xs text-muted-foreground">
-                    {t.n} · {t.c}
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ + CONTACT */}
-        <section id="faq" className="py-20">
-          <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2">
-            <div>
+          <div className="mx-auto max-w-3xl px-4 sm:px-6">
+            <div className="text-center">
               <span className="text-xs font-semibold uppercase tracking-widest text-primary">FAQ</span>
               <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">Questions, answered</h2>
-              <div className="mt-8 space-y-3">
-                {FAQS.map((f, i) => (
-                  <div key={f.q} className="rounded-xl border border-border bg-surface">
-                    <button
-                      onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                      className="flex w-full items-center justify-between gap-4 p-4 text-left"
-                    >
-                      <span className="font-medium">{f.q}</span>
-                      <ChevronDown
-                        className={`h-5 w-5 shrink-0 text-muted-foreground transition ${openFaq === i ? "rotate-180" : ""}`}
-                      />
-                    </button>
-                    {openFaq === i && <p className="px-4 pb-4 text-sm text-muted-foreground">{f.a}</p>}
-                  </div>
-                ))}
-              </div>
             </div>
-            <div>
-              <span className="text-xs font-semibold uppercase tracking-widest text-primary">Contact</span>
-              <h2 className="mt-3 font-display text-3xl font-bold sm:text-4xl">Get in touch</h2>
-              <div className="mt-8 space-y-3">
-                <ContactRow icon={MessageCircle} label="WhatsApp" value="+27 82 123 4567" href={`https://wa.me/${WHATSAPP_NUMBER}`} />
-                <ContactRow icon={Phone} label="Call us" value="+27 82 123 4567" href="tel:+27821234567" />
-                <ContactRow icon={Mail} label="Email" value={CONTACT_EMAIL} href={`mailto:${CONTACT_EMAIL}`} />
-                <ContactRow icon={MapPin} label="Office" value="1 Sandton Drive, Johannesburg, 2196" />
-              </div>
-              <div className="mt-8 flex items-start gap-3 rounded-2xl border border-primary/20 bg-primary/5 p-5">
-                <Zap className="h-5 w-5 shrink-0 text-primary" />
-                <div>
-                  <div className="font-semibold">Fastest response: WhatsApp</div>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Our team typically replies within minutes during business hours (Mon–Fri, 08:00–18:00).
-                  </p>
+            <div className="mt-10 space-y-3">
+              {FAQS.map((f, i) => (
+                <div key={f.q} className="rounded-xl border border-border bg-surface">
+                  <button
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    className="flex w-full items-center justify-between gap-4 p-4 text-left"
+                  >
+                    <span className="font-medium">{f.q}</span>
+                    <ChevronDown
+                      className={`h-5 w-5 shrink-0 text-muted-foreground transition ${openFaq === i ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  {openFaq === i && <p className="px-4 pb-4 text-sm text-muted-foreground">{f.a}</p>}
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
@@ -482,29 +562,34 @@ function Landing() {
         <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 md:grid-cols-3">
           <div>
             <div className="flex items-center gap-2">
-              <div className="grid h-8 w-8 place-items-center rounded-lg gradient-gold text-primary-foreground font-bold">K</div>
-              <span className="font-display font-bold">{BUSINESS_NAME}</span>
+              <div className="grid h-8 w-8 place-items-center rounded-lg gradient-dawn text-primary-foreground">
+                <Sunrise className="h-4 w-4" />
+              </div>
+              <span className="font-display font-bold">NuDawn</span>
             </div>
+            <p className="mt-3 text-sm italic text-muted-foreground">{SLOGAN}</p>
             <p className="mt-3 text-sm text-muted-foreground">
               1 Sandton Drive, Johannesburg, 2196, South Africa.
-            </p>
-            <p className="mt-3 text-xs text-muted-foreground">
-              {BUSINESS_NAME} is an Authorised Credit Provider ({NCRCP}).
             </p>
           </div>
           <div>
             <h4 className="text-sm font-semibold">Legal</h4>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-              <li><button onClick={() => setLegal("privacy")} className="hover:text-foreground">Privacy Policy & POPIA Notice</button></li>
-              <li><button onClick={() => setLegal("terms")} className="hover:text-foreground">Terms of Use</button></li>
-              <li><button onClick={() => setLegal("ncr")} className="hover:text-foreground">Responsible Lending & NCR Disclosures</button></li>
+              <li><button onClick={() => setLegal("privacy")} className="hover:text-foreground">Privacy Policy</button></li>
+              <li><button onClick={() => setLegal("popia")} className="hover:text-foreground">POPIA Notice</button></li>
+              <li><button onClick={() => setLegal("terms")} className="hover:text-foreground">Terms &amp; Conditions</button></li>
             </ul>
           </div>
           <div>
-            <h4 className="text-sm font-semibold">Responsible lending</h4>
+            <h4 className="text-sm font-semibold">Regulatory</h4>
             <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-              Credit is granted subject to affordability assessment as per the National Credit Act 34 of 2005. Late or
-              missed payments may negatively impact your credit record. Borrow only what you can afford to repay.
+              {BUSINESS_NAME} is an Authorised Credit Provider ({NCRCP}).
+            </p>
+            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+              {BUSINESS_NAME} is an Authorised Financial Services Provider ({FSP}).
+            </p>
+            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+              Credit granted subject to affordability assessment (NCA 34 of 2005). Borrow only what you can afford to repay.
             </p>
           </div>
         </div>
@@ -536,9 +621,9 @@ function Landing() {
           >
             <div className="flex items-start justify-between gap-4">
               <h3 className="font-display text-xl font-bold">
-                {legal === "privacy" && "Privacy Policy & POPIA Notice"}
-                {legal === "terms" && "Terms of Use"}
-                {legal === "ncr" && "Responsible Lending & NCR Disclosures"}
+                {legal === "privacy" && "Privacy Policy"}
+                {legal === "popia" && "POPIA Notice"}
+                {legal === "terms" && "Terms & Conditions"}
               </h3>
               <button onClick={() => setLegal(null)} className="rounded-full border border-border px-3 py-1 text-sm">
                 Close
@@ -546,39 +631,24 @@ function Landing() {
             </div>
             <div className="mt-4 space-y-3 text-sm text-muted-foreground">
               {legal === "privacy" && (
-                <>
-                  <p>
-                    {BUSINESS_NAME} collects your personal information solely for the purpose of assessing credit
-                    applications and providing financial services, in accordance with the Protection of Personal
-                    Information Act (POPIA).
-                  </p>
-                  <p>
-                    We do not sell your data. You may request access, correction or deletion of your information at any
-                    time by contacting {CONTACT_EMAIL}.
-                  </p>
-                </>
+                <p>
+                  {BUSINESS_NAME} collects your personal information solely to assess and provide the financial
+                  services you request. We do not sell your data. Contact {CONTACT_EMAIL} for access or deletion.
+                </p>
+              )}
+              {legal === "popia" && (
+                <p>
+                  In line with the Protection of Personal Information Act, you consent to the processing of your
+                  information for enquiry, credit assessment and insurance underwriting purposes. You may withdraw
+                  consent at any time.
+                </p>
               )}
               {legal === "terms" && (
-                <>
-                  <p>
-                    By using this website you agree to our terms. All loan offers are subject to affordability
-                    assessment and final approval under the National Credit Act.
-                  </p>
-                  <p>Calculator estimates are indicative and do not constitute a credit offer.</p>
-                </>
-              )}
-              {legal === "ncr" && (
-                <>
-                  <p>
-                    {BUSINESS_NAME} is a registered Credit Provider with the National Credit Regulator (NCR):{" "}
-                    <strong className="text-foreground">{NCRCP}</strong>.
-                  </p>
-                  <p>
-                    Interest rates, initiation and service fees are charged within the limits prescribed by the NCA.
-                    Complaints may be lodged with the NCR at www.ncr.org.za or the Credit Ombud at
-                    www.creditombud.org.za.
-                  </p>
-                </>
+                <p>
+                  All loan offers are subject to affordability assessment under the National Credit Act. Funeral
+                  cover is underwritten by an authorised insurer. Calculator estimates are indicative and do not
+                  constitute an offer.
+                </p>
               )}
             </div>
           </div>
@@ -589,11 +659,11 @@ function Landing() {
 }
 
 const FAQS = [
-  { q: "How much can I borrow?", a: "You can apply for a personal loan between R1,000 and R20,000, repayable over 1 to 6 months." },
-  { q: "How fast is approval?", a: "Most WhatsApp applications receive an initial response within 10 minutes during business hours." },
-  { q: "What documents do I need?", a: "A valid SA ID, latest payslip or 3 months bank statements, and proof of residence." },
-  { q: "Are you registered?", a: `Yes. ${BUSINESS_NAME} is an authorised NCR credit provider (${NCRCP}).` },
-  { q: "Can I settle early?", a: "Yes — early settlement is welcome with no penalty. Only accrued interest is charged." },
+  { q: "How much can I borrow?", a: "Payday loans range from R500 to R3,000, repayable within 30 days on your next payday." },
+  { q: "How much does funeral cover cost?", a: "Premiums start from R42/month, with cover benefits up to R30,000 per member and up to 16 family members on a single policy." },
+  { q: "How fast is approval?", a: "Most WhatsApp enquiries receive an initial response within minutes during business hours." },
+  { q: "Are you authorised?", a: `Yes. ${BUSINESS_NAME} is a registered NCR credit provider (${NCRCP}) and an FSCA authorised FSP (${FSP}).` },
+  { q: "Do I upload documents on the site?", a: "No. All sensitive documents are handled off-site on WhatsApp with a consultant." },
 ];
 
 function SliderField({
@@ -604,6 +674,8 @@ function SliderField({
   max,
   step,
   onChange,
+  minLabel,
+  maxLabel,
 }: {
   label: string;
   value: string;
@@ -612,6 +684,8 @@ function SliderField({
   max: number;
   step: number;
   onChange: (n: number) => void;
+  minLabel: string;
+  maxLabel: string;
 }) {
   return (
     <div>
@@ -626,11 +700,11 @@ function SliderField({
         step={step}
         value={val}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full accent-[oklch(0.82_0.16_82)]"
+        className="w-full accent-[oklch(0.75_0.18_55)]"
       />
       <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">
-        <span>{typeof min === "number" && min >= 1000 ? ZAR(min) : `${min}${min === 1 ? " month" : " months"}`}</span>
-        <span>{typeof max === "number" && max >= 1000 ? ZAR(max) : `${max} months`}</span>
+        <span>{minLabel}</span>
+        <span>{maxLabel}</span>
       </div>
     </div>
   );
