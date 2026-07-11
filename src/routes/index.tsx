@@ -38,7 +38,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Payday loans up to R3,000 and funeral cover up to R30,000. NCR & FSCA authorised. WhatsApp-first applications.",
+          "Fast payday loans up to R3,000 and affordable funeral cover from R42/month. Authorised Credit & Financial Services Provider. Apply via WhatsApp.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
@@ -46,7 +46,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:title", content: `${BUSINESS_NAME} — ${SLOGAN}` },
       {
         name: "twitter:description",
-        content: "Payday loans & funeral cover from an authorised South African provider.",
+        content: "Fast payday loans up to R3,000 and affordable funeral cover from R42/month. Authorised Credit & Financial Services Provider. Apply via WhatsApp.",
       },
     ],
     links: [{ rel: "canonical", href: "/" }],
