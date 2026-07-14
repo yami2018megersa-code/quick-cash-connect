@@ -760,3 +760,33 @@ function ContactRow({
     inner
   );
 }
+
+import { useEffect } from 'react';
+import { supabase } from "@/lib/supabase"; // Import your custom client
+
+export default function Index() {
+  
+  // This useEffect will run once when the page loads
+  useEffect(() => {
+    async function testConnection() {
+      try {
+        const { data, error } = await supabase.from('applications').select('*').limit(1);
+        
+        if (error) {
+          console.error("❌ Connection failed:", error.message);
+        } else {
+          console.log("✅ Connection successful! Fetched data:", data);
+        }
+      } catch (err) {
+        console.error("❌ Unexpected error:", err);
+      }
+    }
+    
+    testConnection();
+  }, []);
+
+  return (
+    // Your existing JSX code continues here...
+    <div>Testing Supabase Connection... check the console!</div>
+  );
+}
