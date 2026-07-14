@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -535,15 +536,16 @@ function Field({
   );
 }
 
-const FileField = (() => {
-  const Component = (
-    {
-      label,
-      error,
-      ...rest
-    }: { label: string; error?: string } & React.InputHTMLAttributes<HTMLInputElement>,
-    ref: React.Ref<HTMLInputElement>,
-  ) => (
+type FileFieldProps = {
+  label: string;
+  error?: string;
+} & React.InputHTMLAttributes<HTMLInputElement>;
+
+const FileField = forwardRef<HTMLInputElement, FileFieldProps>(function FileField(
+  { label, error, ...rest },
+  ref,
+) {
+  return (
     <div>
       <label className="mb-1.5 block text-sm font-medium text-slate-200">{label}</label>
       <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-dashed border-white/15 bg-slate-900/60 px-3 py-3 text-sm text-slate-300 hover:border-amber-400/50 hover:bg-slate-900">
@@ -559,13 +561,7 @@ const FileField = (() => {
       {error && <p className="mt-1 text-xs text-red-400">{error}</p>}
     </div>
   );
-  // eslint-disable-next-line react/display-name
-  return require("react").forwardRef(Component) as (
-    props: { label: string; error?: string } & React.InputHTMLAttributes<HTMLInputElement> & {
-        ref?: React.Ref<HTMLInputElement>;
-      },
-  ) => JSX.Element;
-})();
+});
 
 function PrimaryButton(props: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const { className = "", children, ...rest } = props;
