@@ -126,7 +126,13 @@
   box-shadow: var(--shadow-gold);
 }
 @utility glass-nav {
-  background-color: color-mix(in oklab, var(--background) 65%, transparent);
+  background-color: color-mix(in oklab, var(--navy) 95%, transparent);
   backdrop-filter: saturate(180%) blur(16px);
-  border-bottom: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+  border-bottom: 1px solid color-mix(in oklab, var(--gold-beam) 60%, transparent);
+}
+@utility text-beam {
+  color: var(--beam);
+}
+@utility bg-beam {
+  background-color: var(--beam);
 }
