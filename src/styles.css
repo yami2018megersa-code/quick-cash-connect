@@ -38,12 +38,13 @@
 
 :root {
   --radius: 0.75rem;
-  /* Deep navy primary — matched to NuDawn logo */
-  --navy: oklch(0.19 0.09 275);
-  --navy-foreground: oklch(0.98 0.005 250);
-  /* Warm gold accent — matched to NuDawn sunburst */
-  --gold: oklch(0.82 0.17 82);
-  --gold-foreground: oklch(0.19 0.09 275);
+  /* Deep indigo-navy — exact match to NuDawn logo (#14134A) */
+  --navy: #14134a;
+  --navy-foreground: #fafaff;
+  /* Warm amber-gold — exact match to NuDawn sunburst (#F5A623) */
+  --gold: #f5a623;
+  --gold-foreground: #14134a;
+
 
   --background: oklch(0.985 0.008 90);
   --foreground: oklch(0.20 0.045 265);
@@ -51,19 +52,20 @@
   --card-foreground: oklch(0.20 0.045 265);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.20 0.045 265);
-  --primary: oklch(0.20 0.045 265);
-  --primary-foreground: oklch(0.98 0.005 250);
+  --primary: var(--navy);
+  --primary-foreground: var(--navy-foreground);
   --secondary: oklch(0.95 0.015 85);
-  --secondary-foreground: oklch(0.20 0.045 265);
+  --secondary-foreground: var(--navy);
   --muted: oklch(0.96 0.008 260);
   --muted-foreground: oklch(0.48 0.03 260);
-  --accent: oklch(0.79 0.14 78);
-  --accent-foreground: oklch(0.22 0.04 260);
+  --accent: var(--gold);
+  --accent-foreground: var(--navy);
   --destructive: oklch(0.58 0.22 27);
   --destructive-foreground: oklch(0.98 0.005 250);
   --border: oklch(0.90 0.015 260);
   --input: oklch(0.92 0.012 260);
-  --ring: oklch(0.79 0.14 78);
+  --ring: var(--gold);
+
 
   /* Signature gradients */
   --gradient-sunrise: linear-gradient(135deg, oklch(0.20 0.045 265) 0%, oklch(0.32 0.08 300) 45%, oklch(0.65 0.15 45) 85%, oklch(0.85 0.14 80) 100%);
