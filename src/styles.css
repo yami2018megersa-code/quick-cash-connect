@@ -128,11 +128,13 @@
 @utility glass-nav {
   background-color: color-mix(in oklab, var(--navy) 95%, transparent);
   backdrop-filter: saturate(180%) blur(16px);
-  border-bottom: 1px solid color-mix(in oklab, var(--gold-beam) 60%, transparent);
+  border-bottom: 1px solid color-mix(in oklab, var(--gold) 35%, transparent);
 }
-@utility text-beam {
-  color: var(--beam);
+
+.glass-nav nav a {
+  color: color-mix(in oklab, var(--navy-foreground) 92%, transparent);
 }
-@utility bg-beam {
-  background-color: var(--beam);
+
+.glass-nav nav a:hover {
+  color: var(--gold);
 }
