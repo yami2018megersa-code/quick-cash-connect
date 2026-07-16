@@ -217,8 +217,14 @@ function FuneralSection() {
                   <li className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-navy mt-0.5" /> No medical tests</li>
                 </ul>
                 <Button asChild className="w-full mt-6 bg-navy text-white hover:bg-navy/90">
-                  <Link to="/apply">Get covered</Link>
-                </Button>
+  <a 
+    href="https://wa.me/27731869932?text=Hi%20NuDawn,%20I%20would%20like%20to%20apply%20for%20Funeral%20Cover."
+    target="_blank" 
+    rel="noopener noreferrer"
+  >
+    Get covered
+  </a>
+</Button>
               </CardContent>
             </Card>
           ))}
