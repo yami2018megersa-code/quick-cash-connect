@@ -34,7 +34,7 @@ serve(async (req: Request) => {
       },
       body: JSON.stringify({
         from: "NuDawn Finances <onboarding@resend.dev>", 
-        to: "yami2018megersa@gmail.com", // <-- UPDATE THIS
+        to: "info@nudawngroup.co.za", 
         subject: `New Application: ${app.full_name} - R${app.amount}`,
         html: emailHtml
       })
