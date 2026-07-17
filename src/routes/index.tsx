@@ -281,7 +281,6 @@ function Footer() {
     <footer className="bg-navy text-white/80">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-14 grid md:grid-cols-4 gap-10">
         <div>
-          <div>
           <Link 
             to="/admin" 
             className="inline-block cursor-default select-none"
@@ -290,8 +289,6 @@ function Footer() {
           >
             <Logo variant="light" />
           </Link>
-          <p className="mt-4 text-sm text-white/70 max-w-xs">New Tomorrow, Together.</p>
-        </div>
           <p className="mt-4 text-sm text-white/70 max-w-xs">New Tomorrow, Together.</p>
         </div>
         <div>
