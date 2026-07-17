@@ -281,9 +281,17 @@ function Footer() {
     <footer className="bg-navy text-white/80">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-14 grid md:grid-cols-4 gap-10">
         <div>
-          <div className="inline-flex rounded-xl bg-white p-2 shadow-sm">
+          <div>
+          <Link 
+            to="/admin" 
+            className="inline-block cursor-default select-none"
+            aria-hidden="true"
+            tabIndex={-1}
+          >
             <Logo variant="light" />
-          </div>
+          </Link>
+          <p className="mt-4 text-sm text-white/70 max-w-xs">New Tomorrow, Together.</p>
+        </div>
           <p className="mt-4 text-sm text-white/70 max-w-xs">New Tomorrow, Together.</p>
         </div>
         <div>
