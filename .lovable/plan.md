@@ -1,26 +1,25 @@
+## Client Content & Header Update
 
-## Scope
-Visual branding only. No changes to routes, server functions, DB/storage code, or `@/lib/supabase` usage.
+Scope: `src/routes/index.tsx` and `src/styles.css` only. No backend/logic changes.
 
-## 1. `src/components/Logo.tsx` — icon-only mark
-Replace the `<img>` (which renders the full logotype with tagline) with an inline SVG recreating just the brand mark from the uploaded image: a golden half-sunburst (5 tapered rays) sitting on top of a deep-navy inverted triangle/diamond.
+### 1. Content replacements (in `src/routes/index.tsx`)
+- Footer email: `hello@nudawn.co.za` → `Info@nudawngroup.co.za` (also update Privacy Policy body).
+- Footer compliance: `NCRCPXXXXX` → `NCRCP20672`, `FSPXXXXX` → `FSP51669`.
+- Terms modal: same NCRCP + FSP replacements.
+- Funeral WhatsApp CTA (Pricing cards): update `wa.me/27731869932` → `wa.me/27872651832` on all 3 plan buttons.
+  - Hero "Explore Funeral Cover" remains as an in-page anchor to `#funeral`.
+- Slogan trim:
+  - Hero paragraph: remove the trailing sentence so only **"New Tomorrow, Together."** remains.
+  - Footer tagline: replace with just **"New Tomorrow, Together."**
 
-- Pure inline SVG using `currentColor` + token colors (`var(--gold)`, `var(--navy)`) so it inherits theme and stays crisp at any DPI.
-- `viewBox` square, `role="img"`, `aria-label="NuDawn"`, size via `className` (default `h-10 w-10`).
-- Keeps the existing named export signature `Logo({ className, variant })` so no caller changes.
-- Delete the `nudawn-logo.png` asset pointer via `lovable-assets delete` (no longer referenced).
+### 2. Header background change
+Make the header much lighter than the current navy `glass-nav`. Use a warm off-white/cream background (`#FAF8F4` or `oklch(0.98 0.01 85)`) with a subtle bottom border, while keeping the brand palette intact for text and logo.
 
-## 2. `src/styles.css` — token alignment to logo
-Current palette is already navy + warm gold, so keep the structure and only tighten values to match the logo exactly:
+- Update `glass-nav` utility in `src/styles.css`:
+  - Background: warm off-white at 95% opacity + blur.
+  - Border: soft gold/navy tint.
+  - Nav link color: navy (`var(--navy)`), hover: gold (`var(--gold)`).
 
-- `--navy` → tuned to the logo's deep indigo-navy (`oklch(0.19 0.09 275)`).
-- `--gold` → tuned to the logo's saturated amber-yellow (`oklch(0.82 0.17 82)`).
-- Re-point `--primary`, `--ring`, `--accent`, gradients, and shadows to the updated navy/gold so buttons, focus rings, card borders on hover, and CTA gradients all reflect the brand.
-- Typography: keep Plus Jakarta Sans (geometric sans matches the logotype's rounded bold sans); add a slightly tighter tracking utility for headings to echo the logo's condensed weight. No new font imports required.
-
-## 3. Verification
-- Visually inspect `/` and `/apply` in the preview after edits: header logo renders as icon only, primary CTA buttons and focus rings use updated gold, navy surfaces match the logo's navy.
+### 3. Verification
+- Visually inspect `/` and `/apply` in the preview: header is light, logo reads clearly, content updates render correctly.
 - Confirm no route/handler/`lib/supabase` files were touched.
-
-## Out of scope
-Route files, form logic, Supabase client, storage/DB code, file restructuring.
