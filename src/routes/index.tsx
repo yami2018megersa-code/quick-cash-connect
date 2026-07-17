@@ -82,8 +82,7 @@ function Hero() {
             Accessible Payday Loans &amp; Affordable Funeral Cover
           </h1>
           <p className="mt-5 text-lg text-white/80 max-w-xl">
-            <span className="font-semibold text-white">New Tomorrow, Together.</span>{" "}
-            Fast, transparent finance for South African families — regulated, respectful, and built for real life.
+            <span className="font-semibold text-white">New Tomorrow, Together.</span>
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg" className="bg-gold-gradient text-navy font-semibold shadow-gold hover:opacity-90">
@@ -218,7 +217,7 @@ function FuneralSection() {
                 </ul>
                 <Button asChild className="w-full mt-6 bg-navy text-white hover:bg-navy/90">
   <a 
-    href="https://wa.me/27731869932?text=Hi%20NuDawn,%20I%20would%20like%20to%20apply%20for%20Funeral%20Cover."
+    href="https://wa.me/27872651832?text=Hi%20NuDawn,%20I%20would%20like%20to%20apply%20for%20Funeral%20Cover."
     target="_blank" 
     rel="noopener noreferrer"
   >
@@ -282,8 +281,10 @@ function Footer() {
     <footer className="bg-navy text-white/80">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-14 grid md:grid-cols-4 gap-10">
         <div>
-          <Logo variant="light" />
-          <p className="mt-4 text-sm text-white/70 max-w-xs">New Tomorrow, Together. Regulated financial services for South African families.</p>
+          <div className="inline-flex rounded-xl bg-white p-2 shadow-sm">
+            <Logo variant="light" />
+          </div>
+          <p className="mt-4 text-sm text-white/70 max-w-xs">New Tomorrow, Together.</p>
         </div>
         <div>
           <h4 className="text-white font-semibold mb-3">Products</h4>
@@ -304,9 +305,9 @@ function Footer() {
         <div>
           <h4 className="text-white font-semibold mb-3">Compliance</h4>
           <ul className="space-y-2 text-sm">
-            <li>NCR Registered Credit Provider: <span className="text-white">NCRCPXXXXX</span></li>
-            <li>FSCA Authorised FSP: <span className="text-white">FSPXXXXX</span></li>
-            <li>hello@nudawn.co.za</li>
+            <li>NCR Registered Credit Provider: <span className="text-white">NCRCP20672</span></li>
+            <li>FSCA Authorised FSP: <span className="text-white">FSP51669</span></li>
+            <li>Info@nudawngroup.co.za</li>
           </ul>
         </div>
       </div>
@@ -338,7 +339,7 @@ function PrivacyPolicy() {
     <>
       <p>NuDawn Financial Services respects your privacy. We collect personal information solely to assess and provide the financial products you apply for.</p>
       <p>Information is stored securely and only shared with credit bureaus, regulators, and service providers where lawfully required.</p>
-      <p>You may request access, correction, or deletion of your data at any time by emailing hello@nudawn.co.za.</p>
+      <p>You may request access, correction, or deletion of your data at any time by emailing Info@nudawngroup.co.za.</p>
     </>
   );
 }
@@ -354,9 +355,9 @@ function PopiaNotice() {
 function Terms() {
   return (
     <>
-      <p>Loans are provided by NuDawn Financial Services, a registered credit provider (NCRCPXXXXX) under the National Credit Act 34 of 2005.</p>
+      <p>Loans are provided by NuDawn Financial Services, a registered credit provider (NCRCP20672) under the National Credit Act 34 of 2005.</p>
       <p>All quotations are pre-agreement disclosures. Final agreements are subject to affordability, credit assessment, and NCR-compliant documentation.</p>
-      <p>Insurance products are underwritten by our licensed partners and administered by NuDawn as an FSCA Authorised Financial Services Provider (FSPXXXXX).</p>
+      <p>Insurance products are underwritten by our licensed partners and administered by NuDawn as an FSCA Authorised Financial Services Provider (FSP51669).</p>
     </>
   );
 }
