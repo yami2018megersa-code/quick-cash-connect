@@ -281,9 +281,9 @@ function Footer() {
     <footer className="bg-navy text-white/80">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-14 grid md:grid-cols-4 gap-10">
         <div>
-          <Link 
-            to="/admin" 
-            className="inline-block cursor-default select-none"
+          <Link
+            to="/admin"
+            className="inline-block cursor-default select-none bg-white rounded-xl p-2 shadow-sm"
             aria-hidden="true"
             tabIndex={-1}
           >

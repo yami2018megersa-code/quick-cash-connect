@@ -107,7 +107,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/png", href: "/__l5e/assets-v1/c8084304-092b-4911-a661-efccd58c739f/nudawn-logo.png" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
